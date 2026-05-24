@@ -1,5 +1,7 @@
 from fastapi import FastAPI,Depends
 from sqlalchemy.orm import Session
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 
 from database import engine,SessionLocal
 import models
@@ -8,6 +10,11 @@ import schemas
 from fastapi.middleware.cors import CORSMiddleware
 
 app=FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+@app.get("/")
+def root():
+    return FileResponse("static/index.html")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
